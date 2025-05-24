@@ -1,0 +1,1 @@
+export { BaseStatInput } from "./BaseStatInput";
