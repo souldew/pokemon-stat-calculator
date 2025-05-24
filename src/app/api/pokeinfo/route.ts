@@ -8,6 +8,12 @@ export async function GET(req: NextRequest) {
   const filePath = path.join(process.cwd(), "src/data/pokemon.json");
   const fileContents = await fs.readFile(filePath, "utf-8");
   const data = JSON.parse(fileContents);
+  if (!data[name!]) {
+    return NextResponse.json(
+      { error: `No data found for name: ${name}` },
+      { status: 404 }
+    );
+  }
   const ans = data[name!];
   return NextResponse.json({ ...ans });
 }
