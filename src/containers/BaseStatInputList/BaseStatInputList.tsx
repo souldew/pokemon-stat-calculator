@@ -1,6 +1,7 @@
 import React from "react";
 import { BaseStatInput } from "../BaseStatInput";
 import { StatType } from "@/types";
+import { StatTypes } from "@/constants";
 
 type Props = {
   values: {
@@ -20,30 +21,13 @@ function BaseStatInputList({ values, onChange }: Props) {
 
   return (
     <React.Fragment>
-      <BaseStatInput
-        value={values["HP"]}
-        onChange={handleChange("HP")}
-      ></BaseStatInput>
-      <BaseStatInput
-        value={values["Atk"]}
-        onChange={handleChange("Atk")}
-      ></BaseStatInput>
-      <BaseStatInput
-        value={values["Def"]}
-        onChange={handleChange("Def")}
-      ></BaseStatInput>
-      <BaseStatInput
-        value={values["SpA"]}
-        onChange={handleChange("SpA")}
-      ></BaseStatInput>
-      <BaseStatInput
-        value={values["SpD"]}
-        onChange={handleChange("SpD")}
-      ></BaseStatInput>
-      <BaseStatInput
-        value={values["Spe"]}
-        onChange={handleChange("Spe")}
-      ></BaseStatInput>
+      {StatTypes.map((statType) => (
+        <BaseStatInput
+          key={statType}
+          value={values[statType]}
+          onChange={handleChange(statType)}
+        ></BaseStatInput>
+      ))}
     </React.Fragment>
   );
 }
