@@ -18,8 +18,6 @@ function BaseStatInputList({ values, onChange }: Props) {
     };
   };
 
-  console.log("BaseStatInputList values", values);
-
   return (
     <React.Fragment>
       <BaseStatInput
