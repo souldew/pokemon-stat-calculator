@@ -5,8 +5,9 @@ import Image from "next/image";
 import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
 import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
-import { StatType } from "@/types";
+import { NatureType, StatType } from "@/types";
 import { NatureInput } from "@/containers/NatureInput";
+import { NatureTypes } from "@/constants/nature";
 
 type FormState = {
   status: string;
@@ -80,15 +81,16 @@ export default function Home() {
   }, [state.baseStats]);
 
   useEffect(() => {
+    if (!NatureTypes.includes(nature as NatureType)) return;
     const next = calcPokeStatusAllAsString({
       baseStats,
       ivStats,
       evStats,
       level,
-      nature: 1.0,
+      nature: nature as NatureType,
     });
     setStatusStat(next);
-  }, [baseStats, ivStats, evStats, level]);
+  }, [baseStats, ivStats, evStats, level, nature]);
 
   useEffect(() => {
     const baseSum = Object.values(baseStats).reduce(
