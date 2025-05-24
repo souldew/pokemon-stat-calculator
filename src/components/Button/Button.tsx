@@ -42,7 +42,6 @@ type GetColorCombinationType = (
 };
 
 const getColorCombination: GetColorCombinationType = (variant, type) => {
-  console.log(`${variant}-${type} not found`);
   switch (`${variant}-${type}`) {
     case "primary-solid":
       return {

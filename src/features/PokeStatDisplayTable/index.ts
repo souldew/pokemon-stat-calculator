@@ -1,0 +1,1 @@
+export { PokeStatDisplayTable } from "./PokeStatDisplayTable";
