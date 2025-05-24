@@ -6,6 +6,7 @@ import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
 import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
 import { StatType } from "@/types";
+import { NatureInput } from "@/containers/NatureInput";
 
 type FormState = {
   status: string;
@@ -32,6 +33,7 @@ export default function Home() {
     }
   );
   const [level, setLevel] = useState<string>("50");
+  const [nature, setNature] = useState<string>("がんばりや");
 
   const [baseStats, setBaseStats] = useState<{ [key in StatType]: string }>({
     HP: "0",
@@ -107,6 +109,7 @@ export default function Home() {
       </form>
       <div>
         Lv. <LevelInput value={level} onChange={setLevel} />
+        性格 <NatureInput value={nature} onChange={setNature} />
       </div>
       <PokeStatDisplayTable
         baseStats={baseStats}
