@@ -4,15 +4,20 @@ type Props = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
-  disabled?: boolean;
 };
-function Input({ type = "number", value, onChange }: Props) {
+
+function Input({
+  type = "number",
+  value,
+  placeholder = "Enter text",
+  onChange,
+}: Props) {
   return (
     <input
       type={type}
       value={value}
       className="border border-gray-300 rounded-md p-2 w-16 no-spin"
-      placeholder="Enter text"
+      placeholder={placeholder}
       onChange={onChange}
       size={10}
     />
