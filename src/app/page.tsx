@@ -105,7 +105,7 @@ export default function Home() {
         <input name="name" />
         <button disabled={isPending}>Send</button>
         {state.iconPath && (
-          <Image src={state.iconPath} alt="noimage" width={50} height={50} />
+          <Image src={state.iconPath} alt="noimage" width={40} height={40} />
         )}
       </form>
       <div>
