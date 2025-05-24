@@ -16,7 +16,6 @@ type FormState = {
 };
 
 export default function Home() {
-  // const [iconPath, setIconPath] = useState<string>("");
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     action,
     {
@@ -77,7 +76,6 @@ export default function Home() {
 
   useEffect(() => {
     if (state.baseStats === undefined) return;
-    console.log("state.baseStats", state.baseStats);
     setBaseStats(state.baseStats);
     setBaseTotal(state.baseTotal);
   }, [state.baseStats, state.baseTotal]);
@@ -106,7 +104,6 @@ export default function Home() {
       <form action={formAction}>
         <input name="name" />
         <button disabled={isPending}>Send</button>
-        <div>{`status: ${state.status},  message: ${state.message}`}</div>
         {state.iconPath && (
           <Image src={state.iconPath} alt="noimage" width={50} height={50} />
         )}
@@ -132,13 +129,8 @@ export default function Home() {
 type Action = (_prevState: FormState, formData: FormData) => Promise<FormState>;
 const action: Action = async (_prevState, formData) => {
   const name = formData.get("name");
-  console.log("formData", formData);
-  console.log("name", name);
-  const res = await fetch(`api/pokeinfo?name=${name}`);
-  console.log(res);
+  const res = await fetch(`/api/pokeinfo?name=${name}`);
   const json = await res.json();
-  console.log("json", json.base);
-  // const list = Object.values(json.base);
   const list = json.base;
   return {
     status: "success",
@@ -146,6 +138,5 @@ const action: Action = async (_prevState, formData) => {
     iconPath: `/pokemon/${formData.get("name")}.png`,
     baseStats: list,
     baseTotal: json.baseTotal,
-    // baseStats: [0, 0, 0, 0, 0, 0],
   };
 };
