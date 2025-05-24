@@ -1,4 +1,4 @@
-import { StatType } from "@/app/page";
+import { StatType } from "@/types";
 
 /**
  * ポケモンのステータス計算関数

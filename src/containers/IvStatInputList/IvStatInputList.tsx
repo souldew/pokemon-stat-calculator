@@ -1,6 +1,6 @@
 import React from "react";
 import { IvStatInput } from "../IvStatInput/IvStatInput";
-import { StatType } from "@/app/page";
+import { StatType } from "@/types";
 
 type Props = {
   values: {

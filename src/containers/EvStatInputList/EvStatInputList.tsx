@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StatType } from "@/app/page";
+import { StatType } from "@/types";
 import { EvStatInput } from "../EvStatInput/EvStatInput";
 
 type Props = {

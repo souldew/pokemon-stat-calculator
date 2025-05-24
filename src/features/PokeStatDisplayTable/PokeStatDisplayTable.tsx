@@ -1,9 +1,10 @@
-import { StatType } from "@/app/page";
 import "@/app/globals.css";
 import { BaseStatInputList } from "@/containers/BaseStatInputList";
 import { IvStatInputList } from "@/containers/IvStatInputList";
 import { EvStatInputList } from "@/containers/EvStatInputList";
 import { StatusStatInputList } from "@/containers/StatusStatInputList";
+import { Dispatch, SetStateAction } from "react";
+import { StatType } from "@/types";
 
 type Props = {
   baseStats: {
@@ -22,7 +23,16 @@ type Props = {
   statusStat: {
     [key in StatType]: string;
   };
-  handleStatusStat: (newStats: { [key in StatType]: string }) => void;
+  handleStatusStat: Dispatch<
+    SetStateAction<{
+      HP: string;
+      Atk: string;
+      Def: string;
+      SpA: string;
+      SpD: string;
+      Spe: string;
+    }>
+  >;
 };
 
 const StatLabelList = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"] as const;

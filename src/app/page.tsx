@@ -5,8 +5,7 @@ import Image from "next/image";
 import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
 import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
-
-export type StatType = "HP" | "Atk" | "Def" | "SpA" | "SpD" | "Spe";
+import { StatType } from "@/types";
 
 type FormState = {
   status: string;

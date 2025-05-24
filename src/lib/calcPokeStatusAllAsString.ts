@@ -1,4 +1,4 @@
-import { StatType } from "@/app/page";
+import { StatType } from "@/types";
 import { calcPokeStatusAll } from "./calcPokeStatusAll";
 
 type Props = {
@@ -9,13 +9,15 @@ type Props = {
   nature: number;
 };
 
+type Returns = { [key in StatType]: string };
+
 function calcPokeStatusAllAsString({
   baseStats,
   ivStats,
   evStats,
   level,
   nature,
-}: Props) {
+}: Props): Returns {
   const baseStatsNums = Object.entries(baseStats).reduce((acc, [k, v]) => {
     acc[k] = typeof v === "number" ? v : Number(v);
     return acc;
@@ -41,7 +43,7 @@ function calcPokeStatusAllAsString({
   const result = Object.entries(resultNums).reduce((acc, [k, v]) => {
     acc[k] = typeof v === "number" ? String(v) : v;
     return acc;
-  }, {} as { [key: string]: string });
+  }, {} as { [key in string]: string });
   return result as { [key in StatType]: string };
 }
 
