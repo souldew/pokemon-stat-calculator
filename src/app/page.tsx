@@ -12,7 +12,6 @@ type FormState = {
   message: string;
   iconPath: string;
   baseStats: { [key in StatType]: string };
-  baseTotal: string;
 };
 
 export default function Home() {
@@ -30,7 +29,6 @@ export default function Home() {
         SpD: "0",
         Spe: "0",
       },
-      baseTotal: "0",
     }
   );
   const [level, setLevel] = useState<string>("50");
@@ -77,8 +75,7 @@ export default function Home() {
   useEffect(() => {
     if (state.baseStats === undefined) return;
     setBaseStats(state.baseStats);
-    setBaseTotal(state.baseTotal);
-  }, [state.baseStats, state.baseTotal]);
+  }, [state.baseStats]);
 
   useEffect(() => {
     const next = calcPokeStatusAllAsString({
@@ -137,6 +134,5 @@ const action: Action = async (_prevState, formData) => {
     message: `APIからの値: ${JSON.stringify(json)}`,
     iconPath: `/pokemon/${formData.get("name")}.png`,
     baseStats: list,
-    baseTotal: json.baseTotal,
   };
 };
