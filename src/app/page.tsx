@@ -86,7 +86,6 @@ export default function Home() {
   }, [state.baseStats]);
 
   useEffect(() => {
-    console.log("useEffect");
     if (level === "") return;
     if (!natureTypes.includes(nature as NatureType)) return;
 
