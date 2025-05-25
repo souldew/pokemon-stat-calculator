@@ -6,43 +6,37 @@ type Props = {
   values: {
     [key in StatType]: string;
   };
-  onChange: (newStats: { [key in StatType]: string }) => void;
+  handleStatusChange: (
+    key: StatType
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function StatusStatInputList({ values, onChange }: Props) {
-  const handleChange = (k: StatType) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newStats = { ...values };
-      newStats[k] = e.target.value;
-      onChange(newStats);
-    };
-  };
-
+function StatusStatInputList({ values, handleStatusChange }: Props) {
   return (
     <React.Fragment>
       <StatusStatInput
         value={values["HP"]}
-        onChange={handleChange("HP")}
+        onChange={handleStatusChange("HP")}
       ></StatusStatInput>
       <StatusStatInput
         value={values["Atk"]}
-        onChange={handleChange("Atk")}
+        onChange={handleStatusChange("Atk")}
       ></StatusStatInput>
       <StatusStatInput
         value={values["Def"]}
-        onChange={handleChange("Def")}
+        onChange={handleStatusChange("Def")}
       ></StatusStatInput>
       <StatusStatInput
         value={values["SpA"]}
-        onChange={handleChange("SpA")}
+        onChange={handleStatusChange("SpA")}
       ></StatusStatInput>
       <StatusStatInput
         value={values["SpD"]}
-        onChange={handleChange("SpD")}
+        onChange={handleStatusChange("SpD")}
       ></StatusStatInput>
       <StatusStatInput
         value={values["Spe"]}
-        onChange={handleChange("Spe")}
+        onChange={handleStatusChange("Spe")}
       ></StatusStatInput>
     </React.Fragment>
   );

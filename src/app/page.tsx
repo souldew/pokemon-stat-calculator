@@ -9,7 +9,6 @@ import { NatureType, StatType } from "@/types";
 import { NatureInput } from "@/containers/NatureInput";
 import { natureMap, natureTypes } from "@/constants/nature";
 import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
-import { statTypes } from "@/constants";
 import { calcPokeStatusAsString } from "@/lib/calcPokeStatusAsString";
 import { PokeNameInput } from "@/containers/PokeNameInput";
 import { Button } from "@/components/Button";
@@ -122,60 +121,72 @@ export default function Home() {
     setStatusStat(next);
   }, [level, nature, baseStats]);
 
-  // 努力値・個体値
-  useEffect(() => {
-    const key = statTypes.find((stat) => {
-      return (
-        ivStats[stat] !== ivStatusRef.current[stat] ||
-        evStats[stat] !== evStatusRef.current[stat]
+  const handleBaseChange =
+    (key: StatType) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newBaseStats = { ...baseStats, [key]: e.target.value };
+      setBaseStats(newBaseStats);
+      const changedStatus = calcPokeStatusAsString(
+        Number(e.target.value),
+        Number(ivStats[key]),
+        Number(evStats[key]),
+        Number(level),
+        Number(natureMap[nature][key]),
+        key
       );
-    });
+      setStatusStat({ ...statusStat, [key]: changedStatus });
+    };
 
-    if (key === undefined) return;
+  const handleIvChange = (key: StatType) => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      setIvStats({ ...ivStats, [key]: e.target.value });
+      const changedStatus = calcPokeStatusAsString(
+        Number(baseStats[key]),
+        Number(e.target.value),
+        Number(evStats[key]),
+        Number(level),
+        Number(natureMap[nature][key]),
+        key
+      );
+      setStatusStat({ ...statusStat, [key]: changedStatus });
+    };
+  };
 
-    const changedStatus = calcPokeStatusAsString(
-      Number(baseStatsRef.current[key]),
-      Number(ivStats[key]),
-      Number(evStats[key]),
-      Number(levelRef.current),
-      Number(natureMap[natureRef.current][key]),
-      key
-    );
-    setStatusStat({ ...statusRef.current, [key]: changedStatus });
-    ivStatusRef.current = { ...ivStats };
-    evStatusRef.current = { ...evStats };
-  }, [ivStats, evStats]);
+  const handleEvChange = (key: StatType) => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEvStats({ ...evStats, [key]: e.target.value });
+      const changedStatus = calcPokeStatusAsString(
+        Number(baseStats[key]),
+        Number(ivStats[key]),
+        Number(e.target.value),
+        Number(level),
+        Number(natureMap[nature][key]),
+        key
+      );
+      setStatusStat({ ...statusStat, [key]: changedStatus });
+    };
+  };
 
-  // 実数値
-  useEffect(() => {
-    // どのステータスが変わったかを判定
-    const key = statTypes.find(
-      (stat) => statusStat[stat] !== statusRef.current[stat]
-    );
-
-    if (key === undefined) return;
-
-    const { iv, ev, success } = calcPokeIvEvStatus(
-      Number(levelRef.current),
-      Number(statusStat[key]),
-      Number(baseStatsRef.current[key]),
-      natureMap[natureRef.current][key],
-      key
-    );
-    if (!success) {
-      return;
-    }
-
-    // 変化したステータスだけ逆算して更新
-    const newIvStats = { ...ivStatusRef.current, [key]: String(iv) };
-    const newEvStats = { ...evStatusRef.current, [key]: String(ev) };
-    setIvStats(newIvStats);
-    setEvStats(newEvStats);
-    // 現在値をrefに保存
-    statusRef.current = statusStat;
-    ivStatusRef.current = newIvStats;
-    evStatusRef.current = newEvStats;
-  }, [statusStat]);
+  const handleStatusChange = (key: StatType) => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newStatus = { ...statusStat, [key]: e.target.value };
+      setStatusStat({ ...newStatus });
+      const { iv, ev, success } = calcPokeIvEvStatus(
+        Number(levelRef.current),
+        Number(e.target.value),
+        Number(baseStatsRef.current[key]),
+        natureMap[natureRef.current][key],
+        key
+      );
+      if (!success) {
+        return;
+      }
+      // 変化したステータスだけ逆算して更新
+      const newIvStats = { ...ivStats, [key]: String(iv) };
+      const newEvStats = { ...evStats, [key]: String(ev) };
+      setIvStats(newIvStats);
+      setEvStats(newEvStats);
+    };
+  };
 
   return (
     <div className="m-4">
@@ -206,14 +217,14 @@ export default function Home() {
       </div>
       <PokeStatDisplayTable
         baseStats={baseStats}
-        handleBaseStats={setBaseStats}
         baseTotal={baseTotal}
         ivStats={ivStats}
-        handleIvStats={setIvStats}
         evStats={evStats}
-        handleEvStats={setEvStats}
         statusStat={statusStat}
-        handleStatusStat={setStatusStat}
+        handleStatusChange={handleStatusChange}
+        handleEvChange={handleEvChange}
+        handleIvChange={handleIvChange}
+        handleBaseChange={handleBaseChange}
       />
     </div>
   );

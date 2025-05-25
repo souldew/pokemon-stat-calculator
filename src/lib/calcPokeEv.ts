@@ -16,7 +16,6 @@ function calcPokeEvStatus(
     { length: candidateCnt },
     (_, i) => i * evIncrement
   ); // 0から252までの努力値候補（4の倍数）
-  console.log("努力値候補:", evCandidate);
   const evs = evCandidate.filter((ev) => {
     const calcStatus = calcPokeStatus(
       base,
