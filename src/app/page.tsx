@@ -25,7 +25,7 @@ export default function Home() {
     {
       status: "",
       message: "",
-      iconPath: "",
+      iconPath: "/default.png",
       baseStats: {
         HP: "0",
         Atk: "0",
@@ -176,11 +176,15 @@ export default function Home() {
   return (
     <div>
       <form action={formAction}>
+        <Image
+          src={state.iconPath}
+          alt="noimage"
+          width={40}
+          height={40}
+          className="h-[40px] object-contain"
+        />
         <input name="name" />
         <button disabled={isPending}>Send</button>
-        {state.iconPath && (
-          <Image src={state.iconPath} alt="noimage" width={40} height={40} />
-        )}
       </form>
       <div>
         Lv. <LevelInput value={level} onChange={setLevel} />
