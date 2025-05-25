@@ -2,7 +2,7 @@ import React from "react";
 
 import { StatType } from "@/types";
 import { EvStatInput } from "../EvStatInput/EvStatInput";
-import { StatTypes } from "@/constants";
+import { statTypes } from "@/constants";
 
 type Props = {
   values: {
@@ -22,7 +22,7 @@ function EvStatInputList({ values, onChange }: Props) {
 
   return (
     <React.Fragment>
-      {StatTypes.map((statType) => (
+      {statTypes.map((statType) => (
         <EvStatInput
           key={statType}
           value={values[statType]}

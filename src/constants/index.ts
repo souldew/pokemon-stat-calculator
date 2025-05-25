@@ -1,1 +1,1 @@
-export const StatTypes = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"] as const;
+export const statTypes = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"] as const;

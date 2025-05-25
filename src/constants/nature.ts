@@ -1,6 +1,6 @@
 import { NatureType, StatType } from "@/types";
 
-export const NatureTypes = [
+export const natureTypes = [
   "さみしがり",
   "いじっぱり",
   "やんちゃ",
@@ -28,7 +28,7 @@ export const NatureTypes = [
   "まじめ",
 ] as const;
 
-export const NatureMap: {
+export const natureMap: {
   [key in NatureType]: { [key in StatType]: number };
 } = {
   さみしがり: {

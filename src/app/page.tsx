@@ -1,13 +1,16 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
 import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
 import { NatureType, StatType } from "@/types";
 import { NatureInput } from "@/containers/NatureInput";
-import { NatureTypes } from "@/constants/nature";
+import { natureMap, natureTypes } from "@/constants/nature";
+import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
+import { statTypes } from "@/constants";
+import { calcPokeStatusAsString } from "@/lib/calcPokeStatusAsString";
 
 type FormState = {
   status: string;
@@ -75,23 +78,19 @@ export default function Home() {
     Spe: "0",
   });
 
+  const levelRef = useRef(level);
+  const natureRef = useRef(nature);
+  const baseStatsRef = useRef(baseStats);
+  const statusRef = useRef(statusStat);
+  const ivStatusRef = useRef(ivStats);
+  const evStatusRef = useRef(evStats);
+
+  // form受け取り時
   useEffect(() => {
-    if (state.baseStats === undefined) return;
     setBaseStats(state.baseStats);
   }, [state.baseStats]);
 
-  useEffect(() => {
-    if (!NatureTypes.includes(nature as NatureType)) return;
-    const next = calcPokeStatusAllAsString({
-      baseStats,
-      ivStats,
-      evStats,
-      level,
-      nature,
-    });
-    setStatusStat(next);
-  }, [baseStats, ivStats, evStats, level, nature]);
-
+  // 種族値合計を計算する
   useEffect(() => {
     const baseSum = Object.values(baseStats).reduce(
       (acc, v) => acc + Number(v),
@@ -99,6 +98,80 @@ export default function Home() {
     );
     setBaseTotal(String(baseSum));
   }, [baseStats]);
+
+  // レベル変更時
+  useEffect(() => {
+    if (level === "") return;
+    if (!natureTypes.includes(nature as NatureType)) return;
+
+    const next = calcPokeStatusAllAsString({
+      baseStats,
+      ivStats: ivStatusRef.current,
+      evStats: evStatusRef.current,
+      level: Number(level),
+      nature,
+    });
+    statusRef.current = next;
+    natureRef.current = nature;
+    baseStatsRef.current = { ...baseStats };
+    levelRef.current = level;
+    setStatusStat(next);
+  }, [level, nature, baseStats]);
+
+  // 努力値・個体値
+  useEffect(() => {
+    const key = statTypes.find((stat) => {
+      return (
+        ivStats[stat] !== ivStatusRef.current[stat] ||
+        evStats[stat] !== evStatusRef.current[stat]
+      );
+    });
+
+    if (key === undefined) return;
+
+    const changedStatus = calcPokeStatusAsString(
+      Number(baseStatsRef.current[key]),
+      Number(ivStats[key]),
+      Number(evStats[key]),
+      Number(levelRef.current),
+      Number(natureMap[natureRef.current][key]),
+      key
+    );
+    setStatusStat({ ...statusRef.current, [key]: changedStatus });
+    ivStatusRef.current = { ...ivStats };
+    evStatusRef.current = { ...evStats };
+  }, [ivStats, evStats]);
+
+  // 実数値
+  useEffect(() => {
+    // どのステータスが変わったかを判定
+    const key = statTypes.find(
+      (stat) => statusStat[stat] !== statusRef.current[stat]
+    );
+
+    if (key === undefined) return;
+
+    const { iv, ev, success } = calcPokeIvEvStatus(
+      Number(levelRef.current),
+      Number(statusStat[key]),
+      Number(baseStatsRef.current[key]),
+      natureMap[natureRef.current][key],
+      key
+    );
+    if (!success) {
+      return;
+    }
+
+    // 変化したステータスだけ逆算して更新
+    const newIvStats = { ...ivStatusRef.current, [key]: String(iv) };
+    const newEvStats = { ...evStatusRef.current, [key]: String(ev) };
+    setIvStats(newIvStats);
+    setEvStats(newEvStats);
+    // 現在値をrefに保存
+    statusRef.current = statusStat;
+    ivStatusRef.current = newIvStats;
+    evStatusRef.current = newEvStats;
+  }, [statusStat]);
 
   return (
     <div>
