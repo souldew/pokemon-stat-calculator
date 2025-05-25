@@ -15,7 +15,7 @@ import { Button } from "@/components/Button";
 
 type FormState = {
   status: string;
-  message: string;
+  message?: string;
   iconPath: string;
   baseStats: { [key in StatType]: string };
   pokeName: string;
@@ -208,15 +208,23 @@ export default function Home() {
 }
 
 type Action = (_prevState: FormState, formData: FormData) => Promise<FormState>;
-const action: Action = async (_prevState, formData) => {
+const action: Action = async (prevState, formData) => {
   const name = formData.get("name");
   const res = await fetch(`/api/pokeinfo?name=${name}`);
+  if (!res.ok) {
+    return {
+      ...prevState,
+      status: "error",
+    };
+  }
   const json = await res.json();
   const list = json.base;
+  const formatedId = json.id.toString().padStart(4, "0");
+  const path = `/pokemon/${formatedId}_${json.ja}.png`;
   return {
     status: "success",
     message: `APIからの値: ${JSON.stringify(json)}`,
-    iconPath: `/pokemon/${formData.get("name")}.png`,
+    iconPath: path,
     baseStats: list,
     pokeName: String(name),
   };
