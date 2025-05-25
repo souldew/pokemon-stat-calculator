@@ -49,7 +49,7 @@ function PokeStatDisplayTable({
   handleStatusStat,
 }: Props) {
   return (
-    <div className="grid grid-rows-8 gap-4 grid-flow-col w-[390px]">
+    <div className="grid grid-rows-8 gap-4 grid-flow-col w-[370px]">
       <div></div>
       {StatLabelList.map((v) => (
         <div key={v}>{v}</div>

@@ -6,6 +6,7 @@ type Props = {
   type?: ButtonType;
   variant?: VariantType;
   size?: SizeType;
+  disabled?: boolean;
   children?: React.ReactNode;
 };
 
@@ -13,6 +14,7 @@ function Button({
   type = "solid",
   variant = "default",
   size = "md",
+  disabled = false,
   children,
 }: Props) {
   const { textColor, backgroundColor, borderColor } = getColorCombination(
@@ -23,6 +25,7 @@ function Button({
 
   return (
     <button
+      disabled={disabled}
       className={`${backgroundColor} ${textColor} ${borderColor} ${textSize} ${paddingSize} rounded-md box-border`}
     >
       {children}
@@ -90,6 +93,11 @@ const getSizeCombination: GetSizeCombinationType = (size) => {
       return {
         textSize: "text-base",
         paddingSize: "px-3 py-2",
+      };
+    case "sm":
+      return {
+        textSize: "text-sm",
+        paddingSize: "px-2 py-1",
       };
     default:
       new Error(`getSizeCombination: ${size} not found`);
