@@ -1,7 +1,7 @@
 import React from "react";
 import { IvStatInput } from "../IvStatInput/IvStatInput";
 import { StatType } from "@/types";
-import { StatTypes } from "@/constants";
+import { statTypes } from "@/constants";
 
 type Props = {
   values: {
@@ -21,7 +21,7 @@ function IvStatInputList({ values, onChange }: Props) {
 
   return (
     <React.Fragment>
-      {StatTypes.map((statType) => (
+      {statTypes.map((statType) => (
         <IvStatInput
           key={statType}
           value={values[statType]}

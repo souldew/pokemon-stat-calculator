@@ -14,7 +14,7 @@ function calcPokeIvEvStatus(
   const minEv = 0;
 
   // 個体値31を計算して個体値を減らすか、努力値を増やすかを確認する
-  const StatusEv0 = calcPokeStatus(
+  const statusEv0 = calcPokeStatus(
     base,
     maxIv,
     minEv,
@@ -22,7 +22,7 @@ function calcPokeIvEvStatus(
     natureMultiplier,
     statType
   );
-  if (StatusEv0 >= status) {
+  if (statusEv0 >= status) {
     const { iv, success } = calcPokeIvStatus(
       level,
       status,

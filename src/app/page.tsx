@@ -7,9 +7,9 @@ import { LevelInput } from "@/containers/levelInput";
 import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
 import { NatureType, StatType } from "@/types";
 import { NatureInput } from "@/containers/NatureInput";
-import { NatureMap, NatureTypes } from "@/constants/nature";
+import { natureMap, natureTypes } from "@/constants/nature";
 import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
-import { StatTypes } from "@/constants";
+import { statTypes } from "@/constants";
 
 type FormState = {
   status: string;
@@ -101,7 +101,7 @@ export default function Home() {
   // レベル変更時
   useEffect(() => {
     if (level === "") return;
-    if (!NatureTypes.includes(nature as NatureType)) return;
+    if (!natureTypes.includes(nature as NatureType)) return;
 
     const next = calcPokeStatusAllAsString({
       baseStats,
@@ -140,7 +140,7 @@ export default function Home() {
   // 実数値
   useEffect(() => {
     // どのステータスが変わったかを判定
-    const key = StatTypes.find(
+    const key = statTypes.find(
       (stat) => statusStat[stat] !== statusRef.current[stat]
     );
 
@@ -150,7 +150,7 @@ export default function Home() {
       Number(levelRef.current),
       Number(statusStat[key]),
       Number(baseStatsRef.current[key]),
-      NatureMap[natureRef.current][key],
+      natureMap[natureRef.current][key],
       key
     );
     if (!success) {

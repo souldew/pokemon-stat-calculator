@@ -1,5 +1,5 @@
-import { StatTypes } from "@/constants";
-import { NatureTypes } from "@/constants/nature";
+import { statTypes } from "@/constants";
+import { natureTypes } from "@/constants/nature";
 
-export type StatType = (typeof StatTypes)[number];
-export type NatureType = (typeof NatureTypes)[number];
+export type StatType = (typeof statTypes)[number];
+export type NatureType = (typeof natureTypes)[number];
