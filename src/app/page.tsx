@@ -50,7 +50,6 @@ export default function Home() {
     SpD: "0",
     Spe: "0",
   });
-  const [baseTotal, setBaseTotal] = useState<string>("0");
 
   const [ivStats, setIvStats] = useState<{ [key in StatType]: string }>({
     HP: "31",
@@ -92,15 +91,6 @@ export default function Home() {
   useEffect(() => {
     setBaseStats(state.baseStats);
   }, [state.baseStats]);
-
-  // 種族値合計を計算する
-  useEffect(() => {
-    const baseSum = Object.values(baseStats).reduce(
-      (acc, v) => acc + Number(v),
-      0
-    );
-    setBaseTotal(String(baseSum));
-  }, [baseStats]);
 
   // レベル変更時
   useEffect(() => {
@@ -217,7 +207,6 @@ export default function Home() {
       </div>
       <PokeStatDisplayTable
         baseStats={baseStats}
-        baseTotal={baseTotal}
         ivStats={ivStats}
         evStats={evStats}
         statusStat={statusStat}
