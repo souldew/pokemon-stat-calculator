@@ -196,12 +196,12 @@ export default function Home() {
           </div>
         </form>
         <div className="flex gap-4">
-          <div>
+          <label>
             Lv. <LevelInput value={level} onChange={setLevel} />
-          </div>
-          <div>
+          </label>
+          <label>
             性格 <NatureInput value={nature} onChange={setNature} />
-          </div>
+          </label>
         </div>
       </div>
       <PokeStatDisplayTable
