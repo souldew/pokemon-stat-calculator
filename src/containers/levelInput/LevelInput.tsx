@@ -8,8 +8,7 @@ type Props = {
 
 function LevelInput({ value, onChange, className }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    onChange(newValue);
+    onChange(e.target.value);
   };
 
   return (
