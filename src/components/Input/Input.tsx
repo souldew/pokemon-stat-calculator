@@ -1,5 +1,5 @@
 type Props = {
-  type: string;
+  type?: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
