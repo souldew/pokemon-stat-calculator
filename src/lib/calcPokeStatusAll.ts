@@ -1,11 +1,13 @@
+import { NatureType } from "@/types";
 import { calcPokeStatus } from "./calcPokeStatus";
+import { NatureMap } from "@/constants/nature";
 
 type Props = {
   baseStats: { [key: string]: number };
   ivStats: { [key: string]: number };
   evStats: { [key: string]: number };
   level: number;
-  nature: number;
+  nature: NatureType;
 };
 
 function calcPokeStatusAll({
@@ -21,7 +23,7 @@ function calcPokeStatusAll({
       ivStats.HP,
       evStats.HP,
       level,
-      nature,
+      NatureMap[nature].HP,
       "HP"
     ),
     Atk: calcPokeStatus(
@@ -29,7 +31,7 @@ function calcPokeStatusAll({
       ivStats.Atk,
       evStats.Atk,
       level,
-      nature,
+      NatureMap[nature].Atk,
       "Atk"
     ),
     Def: calcPokeStatus(
@@ -37,7 +39,7 @@ function calcPokeStatusAll({
       ivStats.Def,
       evStats.Def,
       level,
-      nature,
+      NatureMap[nature].Def,
       "Def"
     ),
     SpA: calcPokeStatus(
@@ -45,7 +47,7 @@ function calcPokeStatusAll({
       ivStats.SpA,
       evStats.SpA,
       level,
-      nature,
+      NatureMap[nature].SpA,
       "SpA"
     ),
     SpD: calcPokeStatus(
@@ -53,7 +55,7 @@ function calcPokeStatusAll({
       ivStats.SpD,
       evStats.SpD,
       level,
-      nature,
+      NatureMap[nature].SpD,
       "SpD"
     ),
     Spe: calcPokeStatus(
@@ -61,7 +63,7 @@ function calcPokeStatusAll({
       ivStats.Spe,
       evStats.Spe,
       level,
-      nature,
+      NatureMap[nature].Spe,
       "Spe"
     ),
   };

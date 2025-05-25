@@ -5,7 +5,9 @@ import Image from "next/image";
 import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
 import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
-import { StatType } from "@/types";
+import { NatureType, StatType } from "@/types";
+import { NatureInput } from "@/containers/NatureInput";
+import { NatureTypes } from "@/constants/nature";
 
 type FormState = {
   status: string;
@@ -32,6 +34,7 @@ export default function Home() {
     }
   );
   const [level, setLevel] = useState<string>("50");
+  const [nature, setNature] = useState<NatureType>("がんばりや");
 
   const [baseStats, setBaseStats] = useState<{ [key in StatType]: string }>({
     HP: "0",
@@ -78,15 +81,16 @@ export default function Home() {
   }, [state.baseStats]);
 
   useEffect(() => {
+    if (!NatureTypes.includes(nature as NatureType)) return;
     const next = calcPokeStatusAllAsString({
       baseStats,
       ivStats,
       evStats,
       level,
-      nature: 1.0,
+      nature,
     });
     setStatusStat(next);
-  }, [baseStats, ivStats, evStats, level]);
+  }, [baseStats, ivStats, evStats, level, nature]);
 
   useEffect(() => {
     const baseSum = Object.values(baseStats).reduce(
@@ -107,6 +111,7 @@ export default function Home() {
       </form>
       <div>
         Lv. <LevelInput value={level} onChange={setLevel} />
+        性格 <NatureInput value={nature} onChange={setNature} />
       </div>
       <PokeStatDisplayTable
         baseStats={baseStats}

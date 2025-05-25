@@ -1,4 +1,4 @@
-import { StatType } from "@/types";
+import { NatureType, StatType } from "@/types";
 import { calcPokeStatusAll } from "./calcPokeStatusAll";
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
   ivStats: { [key: string]: number | string };
   evStats: { [key: string]: number | string };
   level: number | string;
-  nature: number;
+  nature: NatureType;
 };
 
 type Returns = { [key in StatType]: string };
