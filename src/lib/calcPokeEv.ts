@@ -8,11 +8,19 @@ function calcPokeEvStatus(
   natureMultiplier: number,
   statType: StatType
 ): { ev?: number; success: boolean } {
-  const evCandidate = Array.from({ length: 64 }, (_, i) => i * 4);
+  const evIncrement = 4; // 努力値は4の倍数で増加
+  const candidateCnt = 64; // 努力値の候補数（0から252までの4の倍数）
+  const maxIv = 31;
+
+  const evCandidate = Array.from(
+    { length: candidateCnt },
+    (_, i) => i * evIncrement
+  ); // 0から252までの努力値候補（4の倍数）
+  console.log("努力値候補:", evCandidate);
   const evs = evCandidate.filter((ev) => {
     const calcStatus = calcPokeStatus(
       base,
-      31,
+      maxIv,
       ev,
       level,
       natureMultiplier,
