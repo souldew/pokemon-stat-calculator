@@ -34,7 +34,7 @@ export default function Home() {
     }
   );
   const [level, setLevel] = useState<string>("50");
-  const [nature, setNature] = useState<string>("がんばりや");
+  const [nature, setNature] = useState<NatureType>("がんばりや");
 
   const [baseStats, setBaseStats] = useState<{ [key in StatType]: string }>({
     HP: "0",
@@ -87,7 +87,7 @@ export default function Home() {
       ivStats,
       evStats,
       level,
-      nature: nature as NatureType,
+      nature,
     });
     setStatusStat(next);
   }, [baseStats, ivStats, evStats, level, nature]);

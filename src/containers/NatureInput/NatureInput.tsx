@@ -1,15 +1,16 @@
 import { natureAlias } from "@/constants/nature";
+import { NatureType } from "@/types";
 
 type Props = {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: NatureType) => void;
   className?: string;
 };
 
 function NatureInput({ value, onChange, className }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    onChange(newValue);
+    onChange(newValue as NatureType);
   };
   const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
