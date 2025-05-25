@@ -7,25 +7,19 @@ type Props = {
   values: {
     [key in StatType]: string;
   };
-  onChange: (newStats: { [key in StatType]: string }) => void;
+  handleIvChange: (
+    key: StatType
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function IvStatInputList({ values, onChange }: Props) {
-  const handleChange = (k: StatType) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newStats = { ...values };
-      newStats[k] = e.target.value;
-      onChange(newStats);
-    };
-  };
-
+function IvStatInputList({ values, handleIvChange }: Props) {
   return (
     <React.Fragment>
       {statTypes.map((statType) => (
         <IvStatInput
           key={statType}
           value={values[statType]}
-          onChange={handleChange(statType)}
+          onChange={handleIvChange(statType)}
         ></IvStatInput>
       ))}
     </React.Fragment>

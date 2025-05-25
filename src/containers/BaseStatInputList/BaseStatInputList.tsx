@@ -7,25 +7,19 @@ type Props = {
   values: {
     [key in StatType]: string;
   };
-  onChange: (newStats: { [key in StatType]: string }) => void;
+  handleBaseChange: (
+    key: StatType
+  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function BaseStatInputList({ values, onChange }: Props) {
-  const handleChange = (k: StatType) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newStats = { ...values };
-      newStats[k] = e.target.value;
-      onChange(newStats);
-    };
-  };
-
+function BaseStatInputList({ values, handleBaseChange }: Props) {
   return (
     <React.Fragment>
       {statTypes.map((statType) => (
         <BaseStatInput
           key={statType}
           value={values[statType]}
-          onChange={handleChange(statType)}
+          onChange={handleBaseChange(statType)}
         ></BaseStatInput>
       ))}
     </React.Fragment>
