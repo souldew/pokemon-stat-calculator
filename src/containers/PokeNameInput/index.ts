@@ -1,0 +1,1 @@
+export { PokeNameInput } from "./PokeNameInput";

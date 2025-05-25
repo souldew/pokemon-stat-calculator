@@ -11,12 +11,15 @@ import { natureMap, natureTypes } from "@/constants/nature";
 import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
 import { statTypes } from "@/constants";
 import { calcPokeStatusAsString } from "@/lib/calcPokeStatusAsString";
+import { PokeNameInput } from "@/containers/PokeNameInput";
+import { Button } from "@/components/Button";
 
 type FormState = {
   status: string;
   message: string;
   iconPath: string;
   baseStats: { [key in StatType]: string };
+  pokeName: string;
 };
 
 export default function Home() {
@@ -25,7 +28,7 @@ export default function Home() {
     {
       status: "",
       message: "",
-      iconPath: "",
+      iconPath: "/default.png",
       baseStats: {
         HP: "0",
         Atk: "0",
@@ -34,6 +37,7 @@ export default function Home() {
         SpD: "0",
         Spe: "0",
       },
+      pokeName: "",
     }
   );
   const [level, setLevel] = useState<string>("50");
@@ -174,17 +178,31 @@ export default function Home() {
   }, [statusStat]);
 
   return (
-    <div>
-      <form action={formAction}>
-        <input name="name" />
-        <button disabled={isPending}>Send</button>
-        {state.iconPath && (
-          <Image src={state.iconPath} alt="noimage" width={40} height={40} />
-        )}
-      </form>
-      <div>
-        Lv. <LevelInput value={level} onChange={setLevel} />
-        性格 <NatureInput value={nature} onChange={setNature} />
+    <div className="m-4">
+      <div className="flex flex-col gap-2 mb-4">
+        <form action={formAction} className="flex flex-col gap-2">
+          <Image
+            src={state.iconPath}
+            alt="noimage"
+            width={40}
+            height={40}
+            className="h-[40px] object-contain"
+          />
+          <div className="flex gap-2">
+            <PokeNameInput name="name" />
+            <Button disabled={isPending} variant="default" size="sm">
+              Send
+            </Button>
+          </div>
+        </form>
+        <div className="flex gap-4">
+          <label>
+            Lv. <LevelInput value={level} onChange={setLevel} />
+          </label>
+          <label>
+            性格 <NatureInput value={nature} onChange={setNature} />
+          </label>
+        </div>
       </div>
       <PokeStatDisplayTable
         baseStats={baseStats}
@@ -212,5 +230,6 @@ const action: Action = async (_prevState, formData) => {
     message: `APIからの値: ${JSON.stringify(json)}`,
     iconPath: `/pokemon/${formData.get("name")}.png`,
     baseStats: list,
+    pokeName: String(name),
   };
 };

@@ -49,24 +49,24 @@ function PokeStatDisplayTable({
   handleStatusStat,
 }: Props) {
   return (
-    <div className="grid grid-rows-8 gap-4 grid-flow-col w-[400px]">
+    <div className="grid grid-rows-8 gap-4 grid-flow-col w-[370px]">
       <div></div>
       {StatLabelList.map((v) => (
         <div key={v}>{v}</div>
       ))}
       <div>合計</div>
-      <div>種族値</div>
-      <BaseStatInputList values={baseStats} onChange={handleBaseStats} />
-      <div>{baseTotal}</div>
-      <div>個体値</div>
-      <IvStatInputList values={ivStats} onChange={handleIvStats} />
+      <div>実数値</div>
+      <StatusStatInputList values={statusStat} onChange={handleStatusStat} />
       <div></div>
       <div>努力値</div>
       <EvStatInputList values={evStats} onChange={handleEvStats} />
       <div></div>
-      <div>実数値</div>
-      <StatusStatInputList values={statusStat} onChange={handleStatusStat} />
+      <div>個体値</div>
+      <IvStatInputList values={ivStats} onChange={handleIvStats} />
       <div></div>
+      <div>種族値</div>
+      <BaseStatInputList values={baseStats} onChange={handleBaseStats} />
+      <div>{baseTotal}</div>
     </div>
   );
 }
