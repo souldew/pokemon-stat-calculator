@@ -10,6 +10,7 @@ import { NatureInput } from "@/containers/NatureInput";
 import { natureMap, natureTypes } from "@/constants/nature";
 import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
 import { statTypes } from "@/constants";
+import { calcPokeStatusAsString } from "@/lib/calcPokeStatusAsString";
 
 type FormState = {
   status: string;
@@ -119,20 +120,24 @@ export default function Home() {
 
   // 努力値・個体値
   useEffect(() => {
-    if (
-      JSON.stringify(ivStats) === JSON.stringify(ivStatusRef.current) &&
-      JSON.stringify(evStats) === JSON.stringify(evStatusRef.current)
-    ) {
-      return; // 変更がない場合は何もしない
-    }
-    const next = calcPokeStatusAllAsString({
-      baseStats: baseStatsRef.current,
-      ivStats,
-      evStats,
-      level: levelRef.current,
-      nature: natureRef.current,
+    const key = statTypes.find((stat) => {
+      return (
+        ivStats[stat] !== ivStatusRef.current[stat] ||
+        evStats[stat] !== evStatusRef.current[stat]
+      );
     });
-    setStatusStat(next);
+
+    if (key === undefined) return;
+
+    const changedStatus = calcPokeStatusAsString(
+      Number(baseStatsRef.current[key]),
+      Number(ivStats[key]),
+      Number(evStats[key]),
+      Number(levelRef.current),
+      Number(natureMap[natureRef.current][key]),
+      key
+    );
+    setStatusStat({ ...statusRef.current, [key]: changedStatus });
     ivStatusRef.current = { ...ivStats };
     evStatusRef.current = { ...evStats };
   }, [ivStats, evStats]);
@@ -160,7 +165,6 @@ export default function Home() {
     // 変化したステータスだけ逆算して更新
     const newIvStats = { ...ivStatusRef.current, [key]: String(iv) };
     const newEvStats = { ...evStatusRef.current, [key]: String(ev) };
-    console.log("IVs:", newIvStats, "EVs:", newEvStats);
     setIvStats(newIvStats);
     setEvStats(newEvStats);
     // 現在値をrefに保存
