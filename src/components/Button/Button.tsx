@@ -100,7 +100,6 @@ const getSizeCombination: GetSizeCombinationType = (size) => {
         paddingSize: "px-2 py-1",
       };
     default:
-      new Error(`getSizeCombination: ${size} not found`);
+      throw new Error(`getSizeCombination: ${size} not found`);
   }
-  return { textSize: undefined, paddingSize: undefined };
 };
