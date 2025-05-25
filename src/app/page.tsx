@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Image from "next/image";
 import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
@@ -80,36 +80,25 @@ export default function Home() {
     Spe: "0",
   });
 
-  const levelRef = useRef(level);
-  const natureRef = useRef(nature);
-  const baseStatsRef = useRef(baseStats);
-  const statusRef = useRef(statusStat);
-  const ivStatusRef = useRef(ivStats);
-  const evStatusRef = useRef(evStats);
-
   // form受け取り時
   useEffect(() => {
     setBaseStats(state.baseStats);
   }, [state.baseStats]);
 
-  // レベル変更時
   useEffect(() => {
+    console.log("useEffect");
     if (level === "") return;
     if (!natureTypes.includes(nature as NatureType)) return;
 
     const next = calcPokeStatusAllAsString({
       baseStats,
-      ivStats: ivStatusRef.current,
-      evStats: evStatusRef.current,
+      ivStats,
+      evStats,
       level: Number(level),
       nature,
     });
-    statusRef.current = next;
-    natureRef.current = nature;
-    baseStatsRef.current = { ...baseStats };
-    levelRef.current = level;
     setStatusStat(next);
-  }, [level, nature, baseStats]);
+  }, [baseStats, ivStats, evStats, level, nature]);
 
   const handleBaseChange =
     (key: StatType) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,10 +150,10 @@ export default function Home() {
       const newStatus = { ...statusStat, [key]: e.target.value };
       setStatusStat({ ...newStatus });
       const { iv, ev, success } = calcPokeIvEvStatus(
-        Number(levelRef.current),
+        Number(level),
         Number(e.target.value),
-        Number(baseStatsRef.current[key]),
-        natureMap[natureRef.current][key],
+        Number(baseStats[key]),
+        natureMap[nature][key],
         key
       );
       if (!success) {
