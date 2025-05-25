@@ -10,7 +10,6 @@ type Props = {
   baseStats: {
     [key in StatType]: string;
   };
-  baseTotal: string;
   ivStats: {
     [key in StatType]: string;
   };
@@ -36,7 +35,6 @@ type Props = {
 
 function PokeStatDisplayTable({
   baseStats,
-  baseTotal,
   ivStats,
   evStats,
   statusStat,
@@ -45,6 +43,15 @@ function PokeStatDisplayTable({
   handleIvChange,
   handleBaseChange,
 }: Props) {
+  const baseTotal = Object.values(baseStats).reduce(
+    (acc, cur) => acc + Number(cur),
+    0
+  );
+  const evTotal = Object.values(evStats).reduce(
+    (acc, cur) => acc + Number(cur),
+    0
+  );
+
   return (
     <div className="grid grid-rows-8 gap-4 grid-flow-col w-[370px]">
       <div></div>
@@ -60,7 +67,7 @@ function PokeStatDisplayTable({
       <div></div>
       <div>努力値</div>
       <EvStatInputList values={evStats} handleEvChange={handleEvChange} />
-      <div></div>
+      <div>{evTotal}</div>
       <div>個体値</div>
       <IvStatInputList values={ivStats} handleIvChange={handleIvChange} />
       <div></div>
