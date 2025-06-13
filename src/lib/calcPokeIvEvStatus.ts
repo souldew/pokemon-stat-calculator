@@ -22,6 +22,8 @@ function calcPokeIvEvStatus(
     natureMultiplier,
     statType
   );
+
+  // 努力値0のよりも能力値が小さい場合は個体値を調整する
   if (statusEv0 >= status) {
     const { iv, success } = calcPokeIvStatus(
       level,

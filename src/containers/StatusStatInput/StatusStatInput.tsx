@@ -2,9 +2,13 @@ type Props = {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  isError: boolean;
 };
 
-function StatusStatInput({ value, onChange, className }: Props) {
+function StatusStatInput({ value, onChange, isError, className }: Props) {
+  if (isError) {
+    className = `${className} bg-red-100 border-red-300`;
+  }
   return (
     <input
       type="number"
