@@ -73,7 +73,7 @@ export const natureMap: {
   },
   わんぱく: {
     HP: 1.0,
-    Atk: 0.9,
+    Atk: 1.0,
     Def: 1.1,
     SpA: 0.9,
     SpD: 1.0,
