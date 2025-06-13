@@ -7,9 +7,9 @@ type Props = {
   values: {
     [key in StatType]: string;
   };
-  handleIvChange: (
-    key: StatType
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleIvChange: {
+    [key in StatType]: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  };
 };
 
 function IvStatInputList({ values, handleIvChange }: Props) {
@@ -19,7 +19,7 @@ function IvStatInputList({ values, handleIvChange }: Props) {
         <IvStatInput
           key={statType}
           value={values[statType]}
-          onChange={handleIvChange(statType)}
+          onChange={handleIvChange[statType]}
         ></IvStatInput>
       ))}
     </React.Fragment>
