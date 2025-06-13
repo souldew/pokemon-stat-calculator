@@ -8,9 +8,9 @@ type Props = {
   values: {
     [key in StatType]: string;
   };
-  handleEvChange: (
-    key: StatType
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleEvChange: {
+    [key in StatType]: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  };
 };
 
 function EvStatInputList({ values, handleEvChange }: Props) {
@@ -20,7 +20,7 @@ function EvStatInputList({ values, handleEvChange }: Props) {
         <EvStatInput
           key={statType}
           value={values[statType]}
-          onChange={handleEvChange(statType)}
+          onChange={handleEvChange[statType]}
         ></EvStatInput>
       ))}
     </React.Fragment>

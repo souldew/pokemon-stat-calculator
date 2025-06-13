@@ -1,17 +1,14 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import Image from "next/image";
 import { PokeStatDisplayTable } from "@/features/PokeStatDisplayTable";
 import { LevelInput } from "@/containers/levelInput";
-import { calcPokeStatusAllAsString } from "@/lib/calcPokeStatusAllAsString";
 import { NatureType, StatType } from "@/types";
 import { NatureInput } from "@/containers/NatureInput";
-import { natureMap, natureTypes } from "@/constants/nature";
-import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
-import { calcPokeStatusAsString } from "@/lib/calcPokeStatusAsString";
 import { PokeNameInput } from "@/containers/PokeNameInput";
 import { Button } from "@/components/Button";
+import { useStatus } from "@/hooks/useStatus";
 
 type FormState = {
   status: string;
@@ -42,140 +39,43 @@ export default function Home() {
   const [level, setLevel] = useState<string>("50");
   const [nature, setNature] = useState<NatureType>("がんばりや");
 
-  const [baseStats, setBaseStats] = useState<{ [key in StatType]: string }>({
-    HP: "0",
-    Atk: "0",
-    Def: "0",
-    SpA: "0",
-    SpD: "0",
-    Spe: "0",
-  });
-
-  const [ivStats, setIvStats] = useState<{ [key in StatType]: string }>({
-    HP: "31",
-    Atk: "31",
-    Def: "31",
-    SpA: "31",
-    SpD: "31",
-    Spe: "31",
-  });
-
-  const [evStats, setEvStats] = useState<{ [key in StatType]: string }>({
-    HP: "0",
-    Atk: "0",
-    Def: "0",
-    SpA: "0",
-    SpD: "0",
-    Spe: "0",
-  });
-
-  const [statusStat, setStatusStat] = useState<{
-    [key in StatType]: string;
-  }>({
-    HP: "0",
-    Atk: "0",
-    Def: "0",
-    SpA: "0",
-    SpD: "0",
-    Spe: "0",
-  });
-
-  const [statusError, setStatusError] = useState<{
-    [key in StatType]: boolean;
-  }>({
-    HP: false,
-    Atk: false,
-    Def: false,
-    SpA: false,
-    SpD: false,
-    Spe: false,
-  });
-
-  // form受け取り時
-  useEffect(() => {
-    setBaseStats(state.baseStats);
-  }, [state.baseStats]);
-
-  useEffect(() => {
-    if (level === "") return;
-    if (!natureTypes.includes(nature as NatureType)) return;
-
-    const next = calcPokeStatusAllAsString({
-      baseStats,
-      ivStats,
-      evStats,
+  const status = {
+    HP: useStatus({
+      stat: "HP",
       level: Number(level),
       nature,
-    });
-    setStatusStat(next);
-  }, [baseStats, ivStats, evStats, level, nature]);
-
-  const handleBaseChange =
-    (key: StatType) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newBaseStats = { ...baseStats, [key]: e.target.value };
-      setBaseStats(newBaseStats);
-      const changedStatus = calcPokeStatusAsString(
-        Number(e.target.value),
-        Number(ivStats[key]),
-        Number(evStats[key]),
-        Number(level),
-        Number(natureMap[nature][key]),
-        key
-      );
-      setStatusStat({ ...statusStat, [key]: changedStatus });
-    };
-
-  const handleIvChange = (key: StatType) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      setIvStats({ ...ivStats, [key]: e.target.value });
-      const changedStatus = calcPokeStatusAsString(
-        Number(baseStats[key]),
-        Number(e.target.value),
-        Number(evStats[key]),
-        Number(level),
-        Number(natureMap[nature][key]),
-        key
-      );
-      setStatusStat({ ...statusStat, [key]: changedStatus });
-    };
-  };
-
-  const handleEvChange = (key: StatType) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEvStats({ ...evStats, [key]: e.target.value });
-      const changedStatus = calcPokeStatusAsString(
-        Number(baseStats[key]),
-        Number(ivStats[key]),
-        Number(e.target.value),
-        Number(level),
-        Number(natureMap[nature][key]),
-        key
-      );
-      setStatusStat({ ...statusStat, [key]: changedStatus });
-    };
-  };
-
-  const handleStatusChange = (key: StatType) => {
-    return (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newStatus = { ...statusStat, [key]: e.target.value };
-      setStatusStat({ ...newStatus });
-      const { iv, ev, success } = calcPokeIvEvStatus(
-        Number(level),
-        Number(e.target.value),
-        Number(baseStats[key]),
-        natureMap[nature][key],
-        key
-      );
-      setStatusError({ ...statusError, [key]: !success });
-      if (!success) {
-        return;
-      }
-      // 変化したステータスだけ逆算して更新
-      const newIvStats = { ...ivStats, [key]: String(iv) };
-      const newEvStats = { ...evStats, [key]: String(ev) };
-      setIvStats(newIvStats);
-      setEvStats(newEvStats);
-    };
+      actionState: state.baseStats.HP,
+    }),
+    Atk: useStatus({
+      stat: "Atk",
+      level: Number(level),
+      nature,
+      actionState: state.baseStats.Atk,
+    }),
+    Def: useStatus({
+      stat: "Def",
+      level: Number(level),
+      nature,
+      actionState: state.baseStats.Def,
+    }),
+    SpA: useStatus({
+      stat: "SpA",
+      level: Number(level),
+      nature,
+      actionState: state.baseStats.SpA,
+    }),
+    SpD: useStatus({
+      stat: "SpD",
+      level: Number(level),
+      nature,
+      actionState: state.baseStats.SpD,
+    }),
+    Spe: useStatus({
+      stat: "Spe",
+      level: Number(level),
+      nature,
+      actionState: state.baseStats.Spe,
+    }),
   };
 
   return (
@@ -205,17 +105,7 @@ export default function Home() {
           </label>
         </div>
       </div>
-      <PokeStatDisplayTable
-        baseStats={baseStats}
-        ivStats={ivStats}
-        evStats={evStats}
-        statusStat={statusStat}
-        statusError={statusError}
-        handleStatusChange={handleStatusChange}
-        handleEvChange={handleEvChange}
-        handleIvChange={handleIvChange}
-        handleBaseChange={handleBaseChange}
-      />
+      <PokeStatDisplayTable status={status} />
     </div>
   );
 }

@@ -7,9 +7,9 @@ type Props = {
   values: {
     [key in StatType]: string;
   };
-  handleBaseChange: (
-    key: StatType
-  ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBaseChange: {
+    [key in StatType]: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  };
 };
 
 function BaseStatInputList({ values, handleBaseChange }: Props) {
@@ -19,7 +19,7 @@ function BaseStatInputList({ values, handleBaseChange }: Props) {
         <BaseStatInput
           key={statType}
           value={values[statType]}
-          onChange={handleBaseChange(statType)}
+          onChange={handleBaseChange[statType]}
         ></BaseStatInput>
       ))}
     </React.Fragment>
