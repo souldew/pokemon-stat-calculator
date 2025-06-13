@@ -19,6 +19,9 @@ type Props = {
   statusStat: {
     [key in StatType]: string;
   };
+  statusError: {
+    [key in StatType]: boolean;
+  };
   handleStatusChange: (
     key: StatType
   ) => (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -38,6 +41,7 @@ function PokeStatDisplayTable({
   ivStats,
   evStats,
   statusStat,
+  statusError,
   handleStatusChange,
   handleEvChange,
   handleIvChange,
@@ -63,6 +67,7 @@ function PokeStatDisplayTable({
       <StatusStatInputList
         values={statusStat}
         handleStatusChange={handleStatusChange}
+        statusError={statusError}
       />
       <div></div>
       <div>努力値</div>

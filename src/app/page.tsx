@@ -80,6 +80,17 @@ export default function Home() {
     Spe: "0",
   });
 
+  const [statusError, setStatusError] = useState<{
+    [key in StatType]: boolean;
+  }>({
+    HP: false,
+    Atk: false,
+    Def: false,
+    SpA: false,
+    SpD: false,
+    Spe: false,
+  });
+
   // form受け取り時
   useEffect(() => {
     setBaseStats(state.baseStats);
@@ -155,6 +166,7 @@ export default function Home() {
         natureMap[nature][key],
         key
       );
+      setStatusError({ ...statusError, [key]: !success });
       if (!success) {
         return;
       }
@@ -198,6 +210,7 @@ export default function Home() {
         ivStats={ivStats}
         evStats={evStats}
         statusStat={statusStat}
+        statusError={statusError}
         handleStatusChange={handleStatusChange}
         handleEvChange={handleEvChange}
         handleIvChange={handleIvChange}
