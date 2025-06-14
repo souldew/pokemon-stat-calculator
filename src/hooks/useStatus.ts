@@ -81,7 +81,15 @@ const useStatus = ({ stat, level, nature, actionState }: Props) => {
       handleIsErrorChange(false);
       setEv(newEv!.toString());
       setIv(newIv!.toString());
-    } else {
+      statusRef.current = status;
+      baseRef.current = base;
+      evRef.current = newEv!.toString();
+      ivRef.current = newIv!.toString();
+    } else if (
+      evRef.current !== ev ||
+      ivRef.current !== iv ||
+      baseRef.current !== base
+    ) {
       const changedStatus = calcPokeStatusAsString(
         Number(base),
         Number(iv),
@@ -91,11 +99,11 @@ const useStatus = ({ stat, level, nature, actionState }: Props) => {
         stat
       );
       setStatus(changedStatus);
+      statusRef.current = changedStatus;
+      baseRef.current = base;
+      evRef.current = ev;
+      ivRef.current = iv;
     }
-    statusRef.current = status;
-    baseRef.current = base;
-    evRef.current = ev;
-    ivRef.current = iv;
   }, [status, ev, iv, base, level, nature, stat]);
 
   return {
