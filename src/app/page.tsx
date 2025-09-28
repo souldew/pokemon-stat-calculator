@@ -42,37 +42,37 @@ export default function Home() {
   const status = {
     HP: useStatus({
       stat: "HP",
-      level: Number(level),
+      level: level,
       nature,
       actionState: state.baseStats.HP,
     }),
     Atk: useStatus({
       stat: "Atk",
-      level: Number(level),
+      level: level,
       nature,
       actionState: state.baseStats.Atk,
     }),
     Def: useStatus({
       stat: "Def",
-      level: Number(level),
+      level: level,
       nature,
       actionState: state.baseStats.Def,
     }),
     SpA: useStatus({
       stat: "SpA",
-      level: Number(level),
+      level: level,
       nature,
       actionState: state.baseStats.SpA,
     }),
     SpD: useStatus({
       stat: "SpD",
-      level: Number(level),
+      level: level,
       nature,
       actionState: state.baseStats.SpD,
     }),
     Spe: useStatus({
       stat: "Spe",
-      level: Number(level),
+      level: level,
       nature,
       actionState: state.baseStats.Spe,
     }),
