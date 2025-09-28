@@ -2,11 +2,11 @@ import { natureMap, natureTypes } from "@/constants/nature";
 import { calcPokeIvEvStatus } from "@/lib/calcPokeIvEvStatus";
 import { calcPokeStatusAsString } from "@/lib/calcPokeStatusAsString";
 import { NatureType, StatType } from "@/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   stat: StatType;
-  level: number;
+  level: string;
   nature: NatureType;
   actionState: string;
 };
@@ -22,7 +22,7 @@ export type StatusHook = {
   handleEvChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleIvChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBaseChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleIsErrorChange: (e: boolean) => void;
+  // handleIsErrorChange: (e: boolean) => void;
 };
 
 const useStatus = ({ stat, level, nature, actionState }: Props) => {
@@ -34,77 +34,78 @@ const useStatus = ({ stat, level, nature, actionState }: Props) => {
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(e.target.value);
-  };
-  const handleEvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEv(e.target.value);
-  };
-  const handleIvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIv(e.target.value);
-  };
-  const handleBaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBaseStats(e.target.value);
-  };
-  const handleIsErrorChange = (e: boolean) => {
-    setIsError(e);
+    const { iv, ev, success } = calcPokeIvEvStatus(
+      Number(level),
+      Number(e.target.value),
+      Number(base),
+      natureMap[nature][stat],
+      stat
+    );
+    setIsError(!success);
+    if (!success) {
+      return;
+    }
+    setEv(ev!.toString());
+    setIv(iv!.toString());
   };
 
-  const statusRef = useRef<string>(status);
-  const evRef = useRef<string>(ev);
-  const ivRef = useRef<string>(iv);
-  const baseRef = useRef<string>(base);
+  const handleEvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEv(e.target.value);
+    const changedStatus = calcPokeStatusAsString(
+      Number(base),
+      Number(iv),
+      Number(e.target.value),
+      Number(level),
+      natureMap[nature][stat],
+      stat
+    );
+    setStatus(changedStatus);
+  };
+
+  const handleIvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIv(e.target.value);
+    const changedStatus = calcPokeStatusAsString(
+      Number(base),
+      Number(e.target.value),
+      Number(ev),
+      Number(level),
+      natureMap[nature][stat],
+      stat
+    );
+    setStatus(changedStatus);
+  };
+
+  const handleBaseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBaseStats(e.target.value);
+    const changedStatus = calcPokeStatusAsString(
+      Number(e.target.value),
+      Number(iv),
+      Number(ev),
+      Number(level),
+      natureMap[nature][stat],
+      stat
+    );
+    setStatus(changedStatus);
+  };
+
+  useEffect(() => {
+    if (level === "") return;
+    if (!natureTypes.includes(nature as NatureType)) return;
+
+    const next = calcPokeStatusAsString(
+      Number(base),
+      Number(iv),
+      Number(ev),
+      Number(level),
+      natureMap[nature][stat],
+      stat
+    );
+    setStatus(next);
+  }, [base, iv, ev, level, nature, stat]);
 
   useEffect(() => {
     setBaseStats(actionState);
   }, [actionState]);
-
-  useEffect(() => {
-    if (!natureTypes.includes(nature as NatureType)) return;
-    if (statusRef.current !== status) {
-      // 努力値、個体値の更新
-      const {
-        iv: newIv,
-        ev: newEv,
-        success,
-      } = calcPokeIvEvStatus(
-        level,
-        Number(status),
-        Number(base),
-        natureMap[nature][stat],
-        stat
-      );
-      if (!success) {
-        // 努力値、個体値が計算できなかった場合はエラー状態にする
-        handleIsErrorChange(true);
-        statusRef.current = status;
-        return;
-      }
-      handleIsErrorChange(false);
-      setEv(newEv!.toString());
-      setIv(newIv!.toString());
-      statusRef.current = status;
-      baseRef.current = base;
-      evRef.current = newEv!.toString();
-      ivRef.current = newIv!.toString();
-    } else if (
-      evRef.current !== ev ||
-      ivRef.current !== iv ||
-      baseRef.current !== base
-    ) {
-      const changedStatus = calcPokeStatusAsString(
-        Number(base),
-        Number(iv),
-        Number(ev),
-        Number(level),
-        natureMap[nature][stat],
-        stat
-      );
-      setStatus(changedStatus);
-      statusRef.current = changedStatus;
-      baseRef.current = base;
-      evRef.current = ev;
-      ivRef.current = iv;
-    }
-  }, [status, ev, iv, base, level, nature, stat]);
 
   return {
     stat,
@@ -117,7 +118,6 @@ const useStatus = ({ stat, level, nature, actionState }: Props) => {
     handleEvChange,
     handleIvChange,
     handleBaseChange,
-    handleIsErrorChange,
   };
 };
 
