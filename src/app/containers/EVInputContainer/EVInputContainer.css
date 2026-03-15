@@ -1,0 +1,22 @@
+/* スタイリング例 */
+.input-container {
+  position: relative;
+  margin: 20px;
+}
+
+input {
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+input.invalid {
+  border-color: #ff4444;
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 4px;
+}
